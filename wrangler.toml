@@ -1,0 +1,21 @@
+name = "paylink-tg-bridge"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Maps our own short-lived "rid" tracking codes to each invoice's
+# {webhookUrl, botUsername, paylinkApiKey, paylinkBaseUrl}. TTL matches the
+# invoice expiry window, so entries clean themselves up.
+[[kv_namespaces]]
+binding = "RID_MAP"
+id = "188e69053a6c42b7942b3fd848865892"
+
+# This Worker has NO secrets of its own to set up -- it's multi-tenant: every
+# /api/pay call brings its own PayLink API key and (optionally) its own
+# PayLink deployment URL, so any number of unrelated bots/merchants can share
+# one deployment of this Worker without it being tied to one PayLink account.
+#
+# PAYLINK_BASE_URL below is only the *default* used when a caller doesn't
+# pass its own paylinkBaseUrl -- convenient if most callers are hitting the
+# same PayLink deployment, but never required.
+[vars]
+PAYLINK_BASE_URL = "https://uglypay.devugly.workers.dev"
